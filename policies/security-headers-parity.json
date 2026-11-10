@@ -1,0 +1,28 @@
+{
+  "Name": "security-headers-parity",
+  "Comment": "Same 5 headers as the AWS managed SecurityHeadersPolicy, as a custom policy you can extend.",
+  "SecurityHeadersConfig": {
+    "XSSProtection": {
+      "Override": true,
+      "Protection": true,
+      "ModeBlock": true
+    },
+    "FrameOptions": {
+      "Override": true,
+      "FrameOption": "SAMEORIGIN"
+    },
+    "ReferrerPolicy": {
+      "Override": true,
+      "ReferrerPolicy": "strict-origin-when-cross-origin"
+    },
+    "ContentTypeOptions": {
+      "Override": true
+    },
+    "StrictTransportSecurity": {
+      "Override": true,
+      "IncludeSubdomains": true,
+      "Preload": false,
+      "AccessControlMaxAgeSec": 31536000
+    }
+  }
+}
