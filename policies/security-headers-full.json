@@ -1,0 +1,42 @@
+{
+  "Comment": "Seven security headers incl. CSP and Permissions-Policy. CSP here is a starting point - read README tradeoffs before attaching to a real site.",
+  "Name": "security-headers-full",
+  "SecurityHeadersConfig": {
+    "XSSProtection": {
+      "Override": true,
+      "Protection": true,
+      "ModeBlock": true
+    },
+    "FrameOptions": {
+      "Override": true,
+      "FrameOption": "SAMEORIGIN"
+    },
+    "ReferrerPolicy": {
+      "Override": true,
+      "ReferrerPolicy": "strict-origin-when-cross-origin"
+    },
+    "ContentSecurityPolicy": {
+      "Override": true,
+      "ContentSecurityPolicy": "default-src 'self'"
+    },
+    "ContentTypeOptions": {
+      "Override": true
+    },
+    "StrictTransportSecurity": {
+      "Override": true,
+      "IncludeSubdomains": true,
+      "Preload": false,
+      "AccessControlMaxAgeSec": 31536000
+    }
+  },
+  "CustomHeadersConfig": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Header": "Permissions-Policy",
+        "Value": "camera=(), microphone=(), geolocation=()",
+        "Override": true
+      }
+    ]
+  }
+}
