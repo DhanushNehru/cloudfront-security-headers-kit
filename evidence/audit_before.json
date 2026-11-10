@@ -1,0 +1,82 @@
+{
+  "url": "https://d2j08v0yk8fmdm.cloudfront.net/",
+  "score": "5/11",
+  "note": "heuristic checklist, not a security guarantee",
+  "checks": [
+    {
+      "check": "TLS >= 1.2",
+      "pass": true,
+      "detail": "negotiated TLSv1.3, cert expires Mar 10 23:59:59 2027 GMT",
+      "aws_fix": "CloudFront: use a security policy of TLSv1.2_2021 or later"
+    },
+    {
+      "check": "HTTP redirects to HTTPS",
+      "pass": true,
+      "detail": "HTTP returned 301 -> https://d2j08v0yk8fmdm.cloudfront.net/",
+      "aws_fix": "CloudFront: set Viewer Protocol Policy to 'Redirect HTTP to HTTPS'"
+    },
+    {
+      "check": "HSTS",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "CloudFront response headers policy: Strict-Transport-Security (in managed SecurityHeadersPolicy)"
+    },
+    {
+      "check": "CSP",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "Custom CloudFront response headers policy: Content-Security-Policy (NOT in the managed policy; start with default-src 'self')"
+    },
+    {
+      "check": "X-Content-Type-Options",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "Managed SecurityHeadersPolicy includes X-Content-Type-Options: nosniff"
+    },
+    {
+      "check": "X-Frame-Options / frame-ancestors",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "Managed SecurityHeadersPolicy includes X-Frame-Options: SAMEORIGIN"
+    },
+    {
+      "check": "Referrer-Policy",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "Managed SecurityHeadersPolicy includes Referrer-Policy: strict-origin-when-cross-origin"
+    },
+    {
+      "check": "Permissions-Policy",
+      "pass": false,
+      "detail": "header missing",
+      "aws_fix": "Custom CloudFront response headers policy: Permissions-Policy (NOT in the managed policy)"
+    },
+    {
+      "check": "Server header not verbose (informational)",
+      "pass": false,
+      "detail": "Server: AmazonS3 (informational: not a vulnerability by itself)",
+      "aws_fix": "Strip version-leaking Server header",
+      "info": true
+    },
+    {
+      "check": "Cookies Secure+HttpOnly+SameSite",
+      "pass": true,
+      "detail": "no cookies set",
+      "aws_fix": ""
+    },
+    {
+      "check": ".git exposed",
+      "pass": true,
+      "detail": "/.git/HEAD -> HTTP 403",
+      "aws_fix": "Block dotfile paths at the CDN and never deploy them to the bucket"
+    },
+    {
+      "check": ".env exposed",
+      "pass": true,
+      "detail": "/.env -> HTTP 403",
+      "aws_fix": "Block dotfile paths at the CDN and never deploy them to the bucket"
+    }
+  ],
+  "derived_from": "audit_before.json (raw capture, old 12-check framing)",
+  "scoring_note": "Re-scored with stable v0.2 check definitions: Server-banner observation excluded from score (informational). Raw header data unchanged; no re-measurement (demo resources torn down)."
+}
