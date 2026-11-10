@@ -14,7 +14,7 @@ The policy JSON and the before/after evidence come from a real distribution I bu
 
 - Python 3.9+; `pip install boto3` for deploy/teardown. `verify.py` is stdlib-only.
 - AWS credentials configured for your own account (environment variables or `~/.aws/`). The credentials need `sts:GetCallerIdentity`, `s3:CreateBucket`, `s3:PutPublicAccessBlock`, `s3:PutBucketPolicy`, `s3:PutBucketTagging`, `s3:GetBucketTagging`, `s3:PutObject`, `s3:ListBucket`, `s3:DeleteObject`, `s3:DeleteBucket`, and CloudFront `CreateOriginAccessControl`, `CreateResponseHeadersPolicy`, `CreateDistributionWithTags`, `ListTagsForResource`, `GetDistribution`, `GetDistributionConfig`, `UpdateDistribution`, `DeleteDistribution`, `GetOriginAccessControl`, `DeleteOriginAccessControl`, `GetResponseHeadersPolicy`, `DeleteResponseHeadersPolicy`.
-- Cleanup is defensive by construction. deploy.py tags every resource it creates `project=headers-kit-demo` and appends each ID to `.kit-state.json` as it goes, so an interrupted run still leaves teardown a complete picture. teardown.py re-checks the tag (distribution, bucket) or kit name prefix (OAC, policy) on every resource before deleting it; a resource that fails the check - a stale or hand-edited state file pointing somewhere unexpected - is reported and left alone, and the state file is kept for investigation. These failure paths have mocked tests (`tests/test_teardown_safety.py`).
+- Cleanup is defensive by construction. deploy.py tags the resources that support tagging (the distribution and the bucket) `project=headers-kit-demo` and gives the OAC and headers policy kit name prefixes - CloudFront doesn't support tags on those two. It appends each ID to `.kit-state.json` as it goes, so an interrupted run still leaves teardown a complete picture. teardown.py re-checks the tag (distribution, bucket) or kit name prefix (OAC, policy) on every resource before deleting it; a resource that fails the check - a stale or hand-edited state file pointing somewhere unexpected - is reported and left alone, and the state file is kept for investigation. These failure paths have mocked tests (`tests/test_teardown_safety.py`).
 
 ## What's here
 
@@ -64,7 +64,7 @@ pip install boto3
 export AWS_REGION=ap-south-1        # any region; CloudFront is global
 python3 scripts/deploy.py           # prints your dXXXX.cloudfront.net domain
 python3 scripts/verify.py https://dXXXX.cloudfront.net
-python3 scripts/teardown.py         # removes every tagged resource deploy.py created
+python3 scripts/teardown.py         # removes everything deploy.py created
 ```
 
 Cost: a short demo run is a handful of CloudFront and S3 requests at
