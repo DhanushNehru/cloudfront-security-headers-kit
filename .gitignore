@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+.kit-state.json
+.DS_Store
