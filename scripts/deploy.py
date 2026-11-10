@@ -8,8 +8,9 @@ State is written to .kit-state.json INCREMENTALLY, after each resource is
 created - so if the run dies halfway, teardown.py can still see (and remove)
 whatever exists. Don't delete the state file until after teardown.
 
-Every resource gets the tag project=headers-kit-demo; teardown.py re-checks
-that tag before deleting anything."""
+The distribution and bucket get the tag project=headers-kit-demo (OAC and
+headers policies don't support tags; they get kit name prefixes).
+teardown.py re-checks those markers before deleting anything."""
 import boto3, json, time, secrets, os, sys
 
 REGION = os.environ.get("AWS_REGION", "ap-south-1")
